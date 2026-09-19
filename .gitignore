@@ -13,7 +13,7 @@ __pycache__/
 .env.*
 !.env.example
 
-data/
+/data/
 
 # Jupyter
 .ipynb_checkpoints/
