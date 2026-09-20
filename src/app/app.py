@@ -18,6 +18,7 @@ def root():
 # Request schema (same fields you collect in the UI)
 class CustomerData(BaseModel):
     gender: str
+    SeniorCitizen: int = 0          # trained feature - must be provided, defaults to 0
     Partner: str
     Dependents: str
     PhoneService: str
@@ -46,13 +47,14 @@ def api_predict(data: CustomerData):
 
 # --- Gradio UI wrappers the same predict() ---
 def gradio_interface(
-    gender, Partner, Dependents, PhoneService, MultipleLines,
+    gender, SeniorCitizen, Partner, Dependents, PhoneService, MultipleLines,
     InternetService, OnlineSecurity, OnlineBackup, DeviceProtection,
     TechSupport, StreamingTV, StreamingMovies, Contract,
     PaperlessBilling, PaymentMethod, tenure, MonthlyCharges, TotalCharges
 ):
     payload = {
         "gender": gender,
+        "SeniorCitizen": int(SeniorCitizen),
         "Partner": Partner,
         "Dependents": Dependents,
         "PhoneService": PhoneService,
@@ -78,6 +80,7 @@ demo = gr.Interface(
     fn=gradio_interface,
     inputs=[
         gr.Dropdown(["Male", "Female"], label="Gender"),
+        gr.Dropdown([0, 1], label="Senior Citizen (0 = No, 1 = Yes)"),
         gr.Dropdown(["Yes", "No"], label="Partner"),
         gr.Dropdown(["Yes", "No"], label="Dependents"),
         gr.Dropdown(["Yes", "No"], label="Phone Service"),

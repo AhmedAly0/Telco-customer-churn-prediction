@@ -11,7 +11,11 @@ from data.preprocess import preprocess_data
 from features.build_features import build_features
 
 # === CONFIG ===
-DATA_PATH = "/Users/riadanas/Desktop/Telco Customer Churn MLE/data/raw/Telco-Customer-Churn.csv"  # adjust to your file path
+# Resolved from the repository root so the script runs on any machine.
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DATA_PATH = os.environ.get(
+    "TELCO_CSV", os.path.join(PROJECT_ROOT, "data", "raw", "Telco-Customer-Churn.csv")
+)
 TARGET_COL = "Churn"
 
 def main():

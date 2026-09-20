@@ -10,12 +10,11 @@ RUN pip install --upgrade pip \
 
 COPY . .
 
-COPY src/serving/model /app/src/serving/model
-
-# Copy MLFlow run (artifacts+metadata) to the flat /app/model convenience path
-COPY src/serving/model/3b1a41221fc44548aed629fa42b762e0/artifacts/model /app/model
-COPY src/serving/model/3b1a41221fc44548aed629fa42b762e0/artifacts/feature_columns.txt /app/model/feature_columns.txt
-COPY src/serving/model/3b1a41221fc44548aed629fa42b762e0/artifacts/preprocessing.pkl /app/model/preprocessing.pkl
+# Promoted model artifacts (flat layout):
+#   MLmodel, model.ubj, feature_columns.txt, preprocessing.pkl
+# This is the exact layout src/serving/inference.py expects via MODEL_DIR=/app/model,
+# so no run id needs to be hardcoded here anymore.
+COPY src/serving/model /app/model
 
 
 # Ensure logs are shown in time without buffering

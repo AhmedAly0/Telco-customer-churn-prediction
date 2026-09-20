@@ -9,7 +9,7 @@ import time
 import argparse
 import pandas as pd
 import mlflow
-import mlflow.sklearn
+import mlflow.xgboost
 from posthog import project_root
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
@@ -35,10 +35,15 @@ def main(args):
     """
     
     # === MLflow Setup - ESSENTIAL for experiment tracking ===
-    # Configure MLflow to use local file-based tracking (not a tracking server)
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    mlruns_path = args.mlflow_uri or f"file://{project_root}/mlruns"  # Local file-based tracking
-    mlflow.set_tracking_uri(mlruns_path)
+    # MLflow 3.x put the legacy filesystem backend ('file://.../mlruns') into maintenance
+    # mode and raises unless MLFLOW_ALLOW_FILE_STORE=true, so the default is a local
+    # SQLite database - the same store that `mlflow ui --backend-store-uri sqlite:///mlflow.db`
+    # reads and that holds the notebook's experiments.
+    default_store = os.path.join(project_root, "mlflow.db").replace(os.sep, "/")
+    mlflow_uri = args.mlflow_uri or f"sqlite:///{default_store}"
+    mlflow.set_tracking_uri(mlflow_uri)
+    print(f"📚 MLflow tracking URI: {mlflow_uri}")
     mlflow.set_experiment(args.experiment)  # Creates experiment if doesn't exist
 
     # Start MLflow run - all subsequent logging will be tracked under this run
@@ -201,8 +206,10 @@ def main(args):
 
         # === STAGE 7: Model Serialization and Logging ===
         print("💾 Saving model to MLflow...")
-        # ESSENTIAL: Log model in MLflow's standard format for serving
-        mlflow.sklearn.log_model(
+        # ESSENTIAL: Log the model with the XGBoost flavour (mlflow.sklearn cannot
+        # serialise XGBClassifier with MLflow 3.x + skops) so that the serving
+        # pipeline can load it natively with mlflow.xgboost.load_model().
+        mlflow.xgboost.log_model(
             model, 
             artifact_path="model"  # This creates a 'model/' folder in MLflow run artifacts
         )
@@ -227,7 +234,7 @@ if __name__ == "__main__":
     p.add_argument("--test_size", type=float, default=0.2)
     p.add_argument("--experiment", type=str, default="Telco Churn")
     p.add_argument("--mlflow_uri", type=str, default=None,
-                    help="override MLflow tracking URI, else uses project_root/mlruns")
+                    help="MLflow tracking URI (default: sqlite:///<project_root>/mlflow.db)")
 
     args = p.parse_args()
     main(args)

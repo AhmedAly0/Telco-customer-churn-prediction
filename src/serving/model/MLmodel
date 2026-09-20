@@ -1,0 +1,22 @@
+artifact_path: file:///D:/Data Science/ML projects/customer churn prediction/mlruns/2/models/m-18730508c877455ca50720f2ed780166/artifacts
+flavors:
+  python_function:
+    data: model.ubj
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.xgboost
+    python_version: 3.10.0
+  xgboost:
+    code: null
+    data: model.ubj
+    model_class: xgboost.sklearn.XGBClassifier
+    model_format: ubj
+    xgb_version: 3.2.0
+mlflow_version: 3.16.1
+model_id: m-18730508c877455ca50720f2ed780166
+model_size_bytes: 1394174
+model_uuid: m-18730508c877455ca50720f2ed780166
+prompts: null
+run_id: 23c3fdb00c624dd68f2c36bf902b787a
+utc_time_created: '2026-09-19 23:54:55.187601'

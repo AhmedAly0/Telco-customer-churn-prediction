@@ -1,0 +1,35 @@
+{
+  "experiment": "Telco Churn",
+  "run_id": "23c3fdb00c624dd68f2c36bf902b787a",
+  "run_name": "unequaled-hawk-589",
+  "model_id": "m-18730508c877455ca50720f2ed780166",
+  "source": "scripts/run_pipeline.py",
+  "git_commit": "97482e52ff04e15d68824965fcb73454e460e630",
+  "params": {
+    "model": "xgboost",
+    "threshold": "0.35",
+    "test_size": "0.2"
+  },
+  "metrics": {
+    "data_quality_pass": 1.0,
+    "train_time": 1.4746184349060059,
+    "pred_time": 0.01601243019104004,
+    "precision": 0.48881789137380194,
+    "recall": 0.8181818181818182,
+    "f1": 0.612,
+    "roc_auc": 0.8376953680022734
+  },
+  "model_files": [
+    "MLmodel",
+    "conda.yaml",
+    "model.ubj",
+    "python_env.yaml",
+    "registered_model_meta",
+    "requirements.txt"
+  ],
+  "serving_artifacts": [
+    "feature_columns.txt",
+    "preprocessing.pkl"
+  ],
+  "promoted_at": "2026-09-20 03:06:08"
+}

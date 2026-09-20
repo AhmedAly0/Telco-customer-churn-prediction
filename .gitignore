@@ -29,4 +29,8 @@ Thumbs.db
 # MLFlow logs
 mlflow.db
 mlruns/
-artifcats/
+
+# Training-time artifacts (feature_columns.json / preprocessing.pkl).
+# NOTE: src/serving/model/ (the promoted model used by Docker) is intentionally
+# tracked so the CI build has the model available.
+artifacts/

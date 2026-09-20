@@ -1,2 +1,21 @@
+# Keep the build context small and the image clean.
+# Without these, `COPY . .` drags a ~1 GB Windows virtualenv, the MLflow
+# store and the git history into the image (slow builds, bloated images).
 data/
 notebooks/
+.venv/
+venv/
+env/
+mlruns/
+mlflow.db
+artifacts/
+.git/
+.github/
+.kilo/
+.vscode/
+.idea/
+.env
+.env.*
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
