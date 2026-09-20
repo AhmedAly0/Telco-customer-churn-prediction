@@ -161,7 +161,8 @@ Response: `{"prediction": "Likely to churn"}` or `{"prediction": "Not likely to 
 `POST /predict` accepts the 19 raw dataset fields — the 18 features plus `SeniorCitizen`, which the
 model was trained on (omitting it would silently skew every prediction). The full request/response
 schema is auto-documented at `/docs` (OpenAPI). `GET /` is a health check for load balancers, and the
-Gradio UI is mounted at `/ui`.
+Gradio UI is mounted at `/ui`. `GET /monitoring` returns an Evidently summary (dataset drift, drifted
+columns, prediction/target shifts); `GET /monitoring/report` serves the full interactive HTML dashboard.
 
 ## Docker and CI
 
@@ -190,8 +191,8 @@ Gradio UI is mounted at `/ui`.
 - Wire the Optuna study into `run_pipeline.py` (pull best params from the tracking store) instead of
   using fixed values.
 - Remove the legacy duplicate `src/app/app.py` (the app entry point is `src/app/main.py`).
-- Add prediction logging and drift monitoring; stage the promoted model in the MLflow registry with a
-  `champion` alias.
+- Swap the monitoring current-window from the CSV tail to logged `/predict` traffic with joined
+  labels; stage the promoted model in the MLflow registry with a `champion` alias.
 - Add a LICENSE.
 
 ## Credits

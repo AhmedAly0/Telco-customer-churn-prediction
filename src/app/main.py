@@ -143,6 +143,15 @@ def gradio_interface(
     result = predict(data)
     return str(result)  # Return as string for Gradio display
 
+# === MODEL MONITORING (Evidently AI) ===
+# GET /monitoring (JSON summary of feature drift + prediction behaviour),
+# GET /monitoring/report (interactive Evidently HTML dashboard).
+# Registered BEFORE the Gradio mount so the catch-all /ui router can't shadow it.
+from src.monitoring.evidently_monitor import register_monitoring
+
+app = register_monitoring(app)
+
+
 # === GRADIO UI CONFIGURATION ===
 # Build comprehensive Gradio interface with all customer features
 demo = gr.Interface(
